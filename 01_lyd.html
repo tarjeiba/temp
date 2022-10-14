@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="nb">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, innitial-scale=1" />
+    <title>Lyd</title>
+
+    <script src="./grapher.js"></script>
+    <script src="./sounder.js"></script>
+
+    <style>
+      details.task > summary::before {
+        content: "Oppgave: ";
+        font-weight: bold;
+      }
+
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        max-width: 80rem;
+        margin: auto;
+      }
+
+      dl > dt {
+        font-weight: bold;
+      }
+
+      figure {
+        position: relative;
+        width: 60%;
+        margin: auto;
+      }
+
+      svg .axes {
+        stroke-width: 0.01em;
+        stroke: black;
+      }
+
+      .contour {
+        position: relative;
+      }
+
+      .controlpanel {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      figcaption::before {
+        content: "Figur: ";
+        font-weight: bold;
+      }
+
+      [module] {
+        border: 2px solid black;
+        padding: 30px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Bølger</h1>
+    <section>
+      <h2>Fysikk</h2>
+      <p>
+        To objekter kolliderer og noe av energien går til lyd. Når du slipper
+        pennen og denne treffer bordet, vil bordet skyves ned ørlite under der
+        pennen traff. Som en trampoline vil bordet trekke seg tilbake. Når
+        bordet ble skjøvet ned trakk det med seg luften over det, og når det
+        trekker seg tilbake, skyver det luften foran seg. Luften blir i et lite
+        område over bordet trykket litt sammen, det får høyere
+        <emph>trykk</emph>.
+      </p>
+
+      <p>
+        Dette høye trykket vil så spre seg utover i lufta. Merk, det er ikke
+        <emph>lufta</emph> som sprer seg, men det høye trykket. Lufta står mer
+        eller mindre i ro.
+      </p>
+    </section>
+    <section>
+      <h2>Bølgeegenskaper</h2>
+      <p>
+        Bølger kan være <emph>store</emph>, <emph>raske</emph>,
+        <emph>lange</emph>. De som tar matematikk R2, eller et av fysikkfagene,
+        lærer blant annet følgende begreper for å beskrive en bølge:
+      </p>
+
+      <dl>
+        <dt>Amplitude</dt>
+        <dd>
+          Hvor <emph>stor</emph> er en bølge? For en bølge på sjøen måler vi
+          denne verdien i meter, for spenningsbølgene i en elektrisk ledning
+          måer vi det i volt, for en trykkbølge kan vi måle det i pascal.
+        </dd>
+        <dt>Bølgelengde</dt>
+        <dd>
+          Hvor <emph>lang</emph> er en bølge? Måles i et lengdemål, for eksempel
+          meter eller fot.
+        </dd>
+        <dt>Bølgefart</dt>
+        <dd>
+          Hvor <emph>fort</emph> brer bølgen seg? Måles i et fartsmål, for
+          eksempel meter per sekund eller kilometer i timen.
+        </dd>
+        <dt>Frekvens</dt>
+        <dd>
+          Hvor <emph>tett</emph> kommer bølgetoppene forbi en obervatør? Måles i
+          hertz og omtales som «lav» eller «høy».
+        </dd>
+      </dl>
+
+      <div id="amplitude">
+        <h3>Amplitude</h3>
+        <p>
+          På sjøen er <emph>bølgehøyden</emph> høydeforskjellen på en bølgetopp
+          og den påfølgende bølgedalen.
+        </p>
+
+        <div class="contour" id="enkelsinus">
+          <div class="controlpanel">
+            <input type="range" class="frequency" min="0" max="1" step="0.01" />
+            <span>Frekvens</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="bølgelengde">
+        <h3>Bølgelengde</h3>
+      </div>
+      <div id="bølgefart">
+        <h3>Bølgefart</h3>
+
+        <p>
+          Det er tordenvær og du ser et lynglimt. Du begynner å telle.
+          «Tusen-og-en, tusen-og-to, tusen-og-tre ...». Det kommer et tydelig
+          tordendrønn. Lynglimtet beveget seg mot deg med lysets hastighet,
+          omtrent trehundretusen kilometer i sekunder. Tordendrønnet beveget seg
+          mot deg med lydfarten, omtrent trehundre meter i sekundet. Forskjellen
+          på disse to tallene er så vanvittig at vi for de aller fleste
+          praktiske formål kan regne det som at vi så lysglimte idet det
+          skjedde.
+        </p>
+
+        <p>
+          Bølger brer seg i et medie, og det er spesielt to egenskaper ved
+          mediet som bestemmer bølgefarten for kompresjonsbølger (som lyd) i
+          det. 1) Hvor tett er mediet? 2) Hvor komprimerbart er mediet?
+        </p>
+
+        <div>
+          <h4>Hvor tett er mediet?</h4>
+          <p>
+            Om du ska sende en bølge av gårde, må du også sette en masse i
+            bevegelse. De av dere som har hatt Fysikk 1, veit at dersom du skal
+            sette en stor masse i bevegelse, trenger du mer kraft enn om du skal
+            sette en liten masse i bevegelse. For en gitt kraft, blir det
+            resulterende bevegelsen tregere dersom skjøv på en stor masse enn en
+            liten.
+          </p>
+
+          <p>
+            Hvor mye masse det er innenfor et gitt volum av et medie, kaller vi
+            mediets massetetthet.
+          </p>
+        </div>
+
+        <div>
+          <h4>Hvor stivt er mediet?</h4>
+          <p>
+            Om du slår på enden av en metallstang, forventer du at den andre
+            enden beveger seg mer eller mindre momenant. Om du har et rør fylt
+            med luft og to stempler på hver side, forventer du en forsinkelse
+            fra du slår på den ene siden til denne bevgelsen vises på den andre
+            siden.
+          </p>
+
+          <p>
+            Metallstanga er <emph>stivere</emph> enn den tilsvarende luften.
+            Kompresjonsbølgen bredde seg raskere gjennom den, enn den gjorde
+            gjennom luften. Dette til tross for at metallstanga har langt høyere
+            massetetthet enn lufta.
+          </p>
+        </div>
+
+        <div>
+          <h4>Hva betyr dette for lydfart?</h4>
+          <p>
+            Lydfarten i luft påvirkes av luftens tetthet og trykk. Økt trykk
+            gjør luften «stivere» og vil tendere til å øke lydfarten, økt
+            tetthet gjør den tyngre og vil tendere til å minke lydfarten.
+            Temperaturen i lufta påvirker både trykk og tetthet, og sammen gjør
+            det at lydfarten øker litt med temperaturen i lufta.
+          </p>
+
+          <p>
+            Ved 0 °C er lydfarten omtrent 330 m/s. Ved 20 °C er den omtrent 340
+            m/s.
+          </p>
+        </div>
+
+        <div>
+          <h4>Lydfarten avhenger ikke av lydkilden</h4>
+          <p>
+            Legg merke til at i det over har vi kun tatt hensyn til luftens
+            egenskaper, ikke eventuell bevegelse i lydkilden. Dette er fordi
+            lydfarten i mediet lyden skal spre seg i, er fullstendig uavhengig
+            av eventuell bevegelse i lydkilden.
+          </p>
+        </div>
+      </div>
+      <div id="frekvens">
+        <h3>Frekvens</h3>
+      </div>
+    </section>
+    <section>
+      <h2>Summen av to bølger er en ny bølge</h2>
+
+      <p></p>
+    </section>
+    <section>
+      <h2>Bølger som påvirker bølger</h2>
+
+      <p>
+        Vi kan altså høre bølger i lufta som lyd. Hva slags lyd det blir,
+        avhenger av flere ting, blant annet hva slags fasong bølgen har. Vi har
+        sett at summen av flere bølger er en ny bølge, og vi har sett at vi kan
+        sette sammen mer kompliserte bølger fra mange sinusbølger.
+      </p>
+
+      <div id="adsr">
+        <p>
+          Først setter vi opp en <emph>oscillator</emph>, noe som kan generere
+          bølgen vi skal høre. Velg hva slags bølgeform du vil ha, og hvilken
+          frekvens du ønsker.
+        </p>
+        <div module="oscillator"></div>
+        <p>
+          Vi setter deretter opp en konturgenerator. Prøv deg fram med denne.
+          Det er fire verdier å stille på, A, D, S, R.
+        </p>
+        <div module="adsr"></div>
+        <p>
+          Til slutt kobler vi på et vanlig volumtrinn så vi kan justere volumet
+          på lyden.
+        </p>
+        <div module="volume"></div>
+      </div>
+    </section>
+    <section>
+      <h2>Oppgaver</h2>
+      <details class="task">
+        <summary>Slipp en penn</summary>
+        <p>
+          Hold en penn over bordet foran deg og slipp den ned på høykant. Varier
+          høyden du slipper pennen fra. Hvordan påvirker høyden du slipper fra
+          lyden pennen lager når den treffer borde?
+        </p>
+      </details>
+      <details class="task">
+        <summary>Bølger i en tallerken</summary>
+        <p>
+          Ta en kjøkkentallerkern og hell litt vann i den. Slipp pennen din ned
+          i vannet på tilsvarende måte som i forrige oppgave. Ser du bølgene som
+          brer seg i vannet?
+        </p>
+      </details>
+      <details class="task">
+        <summary>Avstand til lynet</summary>
+        <p>
+          Med en lydfart på 340 m/s. Hvor langt unna var lynnedslaget dersom du
+          talte tre sekunder fra du så lynglimtet til du hørte tordendrønnet?
+        </p>
+      </details>
+
+      <details class="task">
+        <summary>Tidevannsmåling?</summary>
+        <p>
+          Du har sommerjobb på den lokale campingplassen og en av oppgavene dine
+          er å måle vannhøyden (som varierer gjennom døgnet på grunn av
+          tidevann).
+        </p>
+        <p>
+          Du ønsker ikke å jobbe for mye, men du ønsker å gjøre jobben
+          tilstrekkelig til at sjefen er fornøyd med deg.
+        </p>
+        <p>Hvor ofte ønsker du å ta en måling av vannhøyden?</p>
+      </details>
+    </section>
+  </body>
+
+  <script defer>
+    const enkeltsinus = new Graph("enkelsinus");
+    const patch = new Patch("adsr");
+  </script>
+</html>
