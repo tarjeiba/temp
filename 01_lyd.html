@@ -5,60 +5,139 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, innitial-scale=1" />
     <title>Lyd</title>
+    <link rel="stylesheet" href="./styles.css" />
 
     <script src="./grapher.js"></script>
     <script src="./sounder.js"></script>
-
-    <style>
-      details.task > summary::before {
-        content: "Oppgave: ";
-        font-weight: bold;
-      }
-
-      body {
-        font-family: Arial, Helvetica, sans-serif;
-        max-width: 80rem;
-        margin: auto;
-      }
-
-      dl > dt {
-        font-weight: bold;
-      }
-
-      figure {
-        position: relative;
-        width: 60%;
-        margin: auto;
-      }
-
-      svg .axes {
-        stroke-width: 0.01em;
-        stroke: black;
-      }
-
-      .contour {
-        position: relative;
-      }
-
-      .controlpanel {
-        position: absolute;
-        top: 0;
-        left: 0;
-      }
-
-      figcaption::before {
-        content: "Figur: ";
-        font-weight: bold;
-      }
-
-      [module] {
-        border: 2px solid black;
-        padding: 30px;
-      }
-    </style>
+    <script src="./noiser.js" type="module"></script>
   </head>
-
   <body>
+    <h1>Trykk og tid</h1>
+    <section>
+      <h2>Tilfeldighet</h2>
+      <p>
+        Du knipser en mynt. Om den lander på kron, skriver du ned en null, om
+        den lander på mynt, én. Det blir tilsynelatende ingen mønstre i tallene
+        du skriver ned.
+      </p>
+
+      <button
+        onclick="(()=> {
+            document.getElementById('throws-number').textContent += (Math.random() <
+            0.5 ? '1 ' : '0 ')})()"
+      >
+        Knips!
+      </button>
+      <span id="throws-number"> </span>
+
+      <p>
+        Vi samler sammen tallene i grupper à 32, og benytter litt matte for å
+        omdanne hver 32-lange gruppe av 0-er og 1-ere til et desimaltall mellom
+        -1 og 1.
+      </p>
+      <p>
+        Vi knipser raskt. Veldig raskt. Vi knipser så vi hvert sekund rekker å
+        få 44100 slike desimaltall, som hver består av 32 0-er og 1-ere.
+      </p>
+      <p>
+        Vi sender så alle disse desimaltallene til et lydkort, som lager en
+        elektrisk spenning, avhengig av verdien til desimaltallet. Denne
+        spenningen gjør så at en liten magnet flytter litt på seg, som flytter
+        på en liten membran, og ut fra en høyttaler kommer følgende.
+      </p>
+
+      <input
+        id="white-noise-volume"
+        type="range"
+        min="0.001"
+        max="0.3"
+        step="0.01"
+      />
+      <button id="white-noise">Start</button>
+
+      <p>
+        Denne støyen, hvor alle verdier er helt uavhengige av hverandre. Et
+        lydmessig anarki. Denne støyen kalles <em>hvit støy</em>. I naturfag
+        lærte du at <em>hvitt lys</em> inneholder alle regnbuens farger. Nå skal
+        du lære at <em>hvit støy</em> inneholder alle, hva skal vi si, skalaens
+        toner?
+      </p>
+
+      <p>
+        For nå, la oss ta med oss følgende. Siffer (engelsk «digits», vi er nå
+        innenfor det <em>digitale</em>) brukes til å representere verdier.
+        Dersom disse verdiene endrer seg i forhold til hverande, kan vi
+        <em>høre</em> endringen i form av lyd. Dersom det ikke er noen struktur
+        mellom tallene, vil lyden vi høre være støy.
+      </p>
+    </section>
+    <section>
+      <h2>Rydde opp i rotet</h2>
+      <p>
+        Støyen vi hørte over, var ikke fra en lydfil. Den blei generert av det
+        du nå bruker til å lese denne nettsida. Om du bruker en mobiltelefon,
+        var det denne som lagde lyden, om du bruker en PC, var det denne. Den
+        lagde lyden ved å kjøre en liten kodesnutt.
+      </p>
+
+      <p>Denne koden ser omtrent ut som følger:</p>
+      <pre>
+                Fortsett med følgende så lenge jeg ber om verdier:
+                1. Gi meg et tilfeldig tall mellom 0 og 1 (Math.random())
+                2. Gang tallet med to
+                3. Trekk fra 1
+                4. Gå til steg 1
+      </pre>
+      <p>
+        Maskinen knipser altså ikke mynt, men den gir oss et ferdig tall mellom
+        0 og 1. For å lage lyd av det, ønsket vi et tall mellom -1 og 1, så da
+        ganger vi først tallet med 2. Dette gir oss et tilfeldig tall mellom 0
+        og 2. For å få tallet til å være mellom -1 og 1, kan vi da bare trekke
+        fra 1.
+      </p>
+
+      <p>
+        Så tilfeldig, kaotisk endring er som oftest ikke det vi ønsker, vi kan
+        dog ikke gå for <em>ingen</em> endring. En mynt med kron på begge sider.
+      </p>
+      <button
+        onclick="(()=> {
+        document.getElementById('throws-zero').textContent += (Math.random() <
+        0.5 ? '0 ' : '0 ')})()"
+      >
+        Knips!
+      </button>
+      <span id="throws-zero"></span>
+      <p>Ei heller kan vi gå for en mynt med mynt på begge sider</p>
+      <button
+        onclick="(()=> {
+        document.getElementById('throws-one').textContent += (Math.random() <
+        0.5 ? '1 ' : '1 ')})()"
+        p
+      >
+        Knips!
+      </button>
+      <span id="throws-one"></span>
+
+      <p>
+        Her er det ikke mye å høre. For å få lyd, må noe være i
+        <em>endring</em>. Med støy, er den endringen ustruktert. Hva skjer om vi
+        strukturerer endringen? Hva om vi gjør endringen mer systematisk? Hva om
+        vi heller enn å velge en fullstendig tilfeldig fullstendig ny verdi,
+        fortsatt lar noe være tilfeldig, men at det tilfeldige bidraget er
+        mindre, tregere.
+      </p>
+
+      <input
+        id="brown-noise-volume"
+        type="range"
+        min="0.001"
+        max="0.3"
+        step="0.01"
+      />
+      <button id="brown-noise">Start</button>
+    </section>
+
     <h1>Bølger</h1>
     <section>
       <h2>Fysikk</h2>
@@ -69,68 +148,85 @@
         bordet ble skjøvet ned trakk det med seg luften over det, og når det
         trekker seg tilbake, skyver det luften foran seg. Luften blir i et lite
         område over bordet trykket litt sammen, det får høyere
-        <emph>trykk</emph>.
+        <em>trykk</em>.
       </p>
 
       <p>
         Dette høye trykket vil så spre seg utover i lufta. Merk, det er ikke
-        <emph>lufta</emph> som sprer seg, men det høye trykket. Lufta står mer
-        eller mindre i ro.
+        <em>lufta</em> som sprer seg, men det høye trykket. Lufta står mer eller
+        mindre i ro.
+      </p>
+
+      <p>
+        Vi tegner ofte lydbølger som noe à la figuren under. Vi har tid eller
+        rom på førsteaksen (x-aksen, om du vil, abscissen), og vi har trykk på
+        andreaksen (y-aksen, om du vil, ordinaten). Vi bruker dette som en
+        visuell representasjon av virkeligheten, og det skaper et bilde av at
+        lyd er noe som svinger opp og ned i lufta og møter ørene våre.
+      </p>
+
+      <div id="ikkeinteraktivsinus"></div>
+
+      <p>Det stemmer dog ikke fullstendig.</p>
+
+      <p>
+        Lyd svinger ikke opp og ned. Lyd er et fenomen hjernen vår lager av
+        sanseinntrykk i all hovedsak basert på svingninger i lufttrykk.
+        Lufttrykket svinger, men ikke i en fysisk retning. Vi må passe oss for å
+        forstå figurene vi ser på som et bilde på virkeligheten.
       </p>
     </section>
     <section>
       <h2>Bølgeegenskaper</h2>
       <p>
-        Bølger kan være <emph>store</emph>, <emph>raske</emph>,
-        <emph>lange</emph>. De som tar matematikk R2, eller et av fysikkfagene,
-        lærer blant annet følgende begreper for å beskrive en bølge:
+        Bølger kan være<em>store</em>,<em>raske</em>,<em>lange</em>. De som tar
+        matematikk R2, eller et av fysikkfagene, lærer blant annet følgende
+        begreper for å beskrive en bølge:
       </p>
-
       <dl>
         <dt>Amplitude</dt>
         <dd>
-          Hvor <emph>stor</emph> er en bølge? For en bølge på sjøen måler vi
-          denne verdien i meter, for spenningsbølgene i en elektrisk ledning
-          måer vi det i volt, for en trykkbølge kan vi måle det i pascal.
+          Hvor<em>stor</em>er en bølge? For en bølge på sjøen måler vi denne
+          verdien i meter, for spenningsbølgene i en elektrisk ledning måer vi
+          det i volt, for en trykkbølge kan vi måle det i pascal.
         </dd>
         <dt>Bølgelengde</dt>
         <dd>
-          Hvor <emph>lang</emph> er en bølge? Måles i et lengdemål, for eksempel
-          meter eller fot.
+          Hvor<em>lang</em>er en bølge? Måles i et lengdemål, for eksempel meter
+          eller fot.
         </dd>
         <dt>Bølgefart</dt>
         <dd>
-          Hvor <emph>fort</emph> brer bølgen seg? Måles i et fartsmål, for
-          eksempel meter per sekund eller kilometer i timen.
+          Hvor<em>fort</em>brer bølgen seg? Måles i et fartsmål, for eksempel
+          meter per sekund eller kilometer i timen.
         </dd>
         <dt>Frekvens</dt>
         <dd>
-          Hvor <emph>tett</emph> kommer bølgetoppene forbi en obervatør? Måles i
-          hertz og omtales som «lav» eller «høy».
+          Hvor<em>tett</em>kommer bølgetoppene forbi en obervatør? Måles i hertz
+          og omtales som «lav» eller «høy».
         </dd>
       </dl>
-
       <div id="amplitude">
         <h3>Amplitude</h3>
         <p>
-          På sjøen er <emph>bølgehøyden</emph> høydeforskjellen på en bølgetopp
-          og den påfølgende bølgedalen.
+          På sjøen er<em>bølgehøyden</em>høydeforskjellen på en bølgetopp og den
+          påfølgende bølgedalen.
         </p>
-
         <div class="contour" id="enkelsinus">
           <div class="controlpanel">
-            <input type="range" class="frequency" min="0" max="1" step="0.01" />
-            <span>Frekvens</span>
+            <input
+              type="range"
+              class="frequency"
+              min="0"
+              max="1"
+              step="0.01"
+            /><span>Frekvens</span>
           </div>
         </div>
       </div>
-
-      <div id="bølgelengde">
-        <h3>Bølgelengde</h3>
-      </div>
+      <div id="bølgelengde"><h3>Bølgelengde</h3></div>
       <div id="bølgefart">
         <h3>Bølgefart</h3>
-
         <p>
           Det er tordenvær og du ser et lynglimt. Du begynner å telle.
           «Tusen-og-en, tusen-og-to, tusen-og-tre ...». Det kommer et tydelig
@@ -141,13 +237,11 @@
           praktiske formål kan regne det som at vi så lysglimte idet det
           skjedde.
         </p>
-
         <p>
           Bølger brer seg i et medie, og det er spesielt to egenskaper ved
           mediet som bestemmer bølgefarten for kompresjonsbølger (som lyd) i
           det. 1) Hvor tett er mediet? 2) Hvor komprimerbart er mediet?
         </p>
-
         <div>
           <h4>Hvor tett er mediet?</h4>
           <p>
@@ -158,13 +252,11 @@
             resulterende bevegelsen tregere dersom skjøv på en stor masse enn en
             liten.
           </p>
-
           <p>
             Hvor mye masse det er innenfor et gitt volum av et medie, kaller vi
             mediets massetetthet.
           </p>
         </div>
-
         <div>
           <h4>Hvor stivt er mediet?</h4>
           <p>
@@ -174,15 +266,13 @@
             fra du slår på den ene siden til denne bevgelsen vises på den andre
             siden.
           </p>
-
           <p>
-            Metallstanga er <emph>stivere</emph> enn den tilsvarende luften.
+            Metallstanga er<em>stivere</em>enn den tilsvarende luften.
             Kompresjonsbølgen bredde seg raskere gjennom den, enn den gjorde
             gjennom luften. Dette til tross for at metallstanga har langt høyere
             massetetthet enn lufta.
           </p>
         </div>
-
         <div>
           <h4>Hva betyr dette for lydfart?</h4>
           <p>
@@ -192,13 +282,11 @@
             Temperaturen i lufta påvirker både trykk og tetthet, og sammen gjør
             det at lydfarten øker litt med temperaturen i lufta.
           </p>
-
           <p>
             Ved 0 °C er lydfarten omtrent 330 m/s. Ved 20 °C er den omtrent 340
             m/s.
           </p>
         </div>
-
         <div>
           <h4>Lydfarten avhenger ikke av lydkilden</h4>
           <p>
@@ -209,30 +297,25 @@
           </p>
         </div>
       </div>
-      <div id="frekvens">
-        <h3>Frekvens</h3>
-      </div>
+      <div id="frekvens"><h3>Frekvens</h3></div>
     </section>
     <section>
       <h2>Summen av to bølger er en ny bølge</h2>
-
       <p></p>
     </section>
     <section>
       <h2>Bølger som påvirker bølger</h2>
-
       <p>
         Vi kan altså høre bølger i lufta som lyd. Hva slags lyd det blir,
         avhenger av flere ting, blant annet hva slags fasong bølgen har. Vi har
         sett at summen av flere bølger er en ny bølge, og vi har sett at vi kan
         sette sammen mer kompliserte bølger fra mange sinusbølger.
       </p>
-
       <div id="adsr">
         <p>
-          Først setter vi opp en <emph>oscillator</emph>, noe som kan generere
-          bølgen vi skal høre. Velg hva slags bølgeform du vil ha, og hvilken
-          frekvens du ønsker.
+          Først setter vi opp en<em>oscillator</em>, noe som kan generere bølgen
+          vi skal høre. Velg hva slags bølgeform du vil ha, og hvilken frekvens
+          du ønsker.
         </p>
         <div module="oscillator"></div>
         <p>
@@ -272,7 +355,6 @@
           talte tre sekunder fra du så lynglimtet til du hørte tordendrønnet?
         </p>
       </details>
-
       <details class="task">
         <summary>Tidevannsmåling?</summary>
         <p>
@@ -289,8 +371,9 @@
     </section>
   </body>
 
-  <script defer>
-    const enkeltsinus = new Graph("enkelsinus");
+  <script async>
+    const ikkeinteraktiv = new Graph("ikkeinteraktivsinus");
+    const enkelsinus = new Graph("enkelsinus");
     const patch = new Patch("adsr");
   </script>
 </html>

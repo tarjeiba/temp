@@ -4,7 +4,7 @@ const waveforms = {
     triangle: (f, x) => {
         const T = 1 / f;
         const t = 123 % 2;
-    }
+    },
 };
 class Controller {
     constructor(graph, el) {
@@ -15,18 +15,19 @@ class Controller {
 }
 class Graph {
     constructor(id, caption) {
+        var _a;
         this.markers = [];
         this.createControllers = (el) => {
             const inputs = Array.from(el.getElementsByTagName("input"));
-            inputs.forEach(input => new Controller(this, input));
+            inputs.forEach((input) => new Controller(this, input));
         };
         const el = document.getElementById(id);
         const figure = document.createElement("figure");
-        const controlPanels = Array.from(el.getElementsByClassName("controlpanel"));
+        const controlPanels = Array.from((_a = el === null || el === void 0 ? void 0 : el.getElementsByClassName("controlpanel")) !== null && _a !== void 0 ? _a : []);
         controlPanels.forEach(this.createControllers);
         this.svg = document.createElementNS(SVGNS, "svg");
         this.svg.setAttribute("width", "80%");
-        this.svg.setAttribute("preserveAspectRatio", "xMidYmid meet");
+        this.svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
         this.svg.setAttribute("viewBox", "0 -50 100 100");
         if (caption) {
             const figcaption = document.createElement("figcaption");
@@ -36,7 +37,7 @@ class Graph {
         this.initializeAxes();
         this.drawSine(50, 0.1, 0, 100, 0, 100);
         figure.appendChild(this.svg);
-        el.appendChild(figure);
+        el === null || el === void 0 ? void 0 : el.appendChild(figure);
     }
     initializeAxes() {
         const g = document.createElementNS(SVGNS, "g");
@@ -55,7 +56,8 @@ class Graph {
     }
     updateFrequency(value) {
         this.markers.forEach((marker) => {
-            marker.setAttribute("cy", waveforms["sine"](value, marker.getAttribute("cx")) * 50);
+            var _a;
+            marker.setAttribute("cy", String((_a = waveforms["sine"](value, Number(marker.getAttribute("cx")))) !== null && _a !== void 0 ? _a : 0 * 50));
         });
     }
     drawMarker(x, y, group) {
