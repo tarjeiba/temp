@@ -80,11 +80,11 @@ class Graph {
     });
   }
 
-  drawMarker(x, y, group) {
+  drawMarker(x: number, y: number, group: SVGGElement) {
     const circle = document.createElementNS(SVGNS, "circle");
     circle.setAttribute("r", "1");
-    circle.setAttribute("cx", x);
-    circle.setAttribute("cy", y);
+    circle.setAttribute("cx", String(x));
+    circle.setAttribute("cy", String(y));
     circle.setAttribute("fill", "red");
     group.appendChild(circle);
     this.markers.push(circle);

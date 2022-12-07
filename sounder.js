@@ -1,3 +1,4 @@
+"use strict";
 class Patch {
     constructor(id) {
         this.ctx = new window.AudioContext();
@@ -90,19 +91,19 @@ class ADSR {
             document.removeEventListener("mouseup", this.release);
         };
         this.node = this.patch.ctx.createGain();
-        for (let name of [
-            "aController",
-            "dController",
-            "sController",
-            "rController",
+        for (let controller of [
+            this.aController,
+            this.dController,
+            this.sController,
+            this.rController,
         ]) {
-            this[name] = document.createElement("input");
-            this[name].type = "range";
-            this[name].min = "0";
-            this[name].max = "10";
-            this[name].value = "1";
-            this[name].step = "0.01";
-            this.el.appendChild(this[name]);
+            controller = document.createElement("input");
+            controller.type = "range";
+            controller.min = "0";
+            controller.max = "10";
+            controller.value = "1";
+            controller.step = "0.01";
+            this.el.appendChild(controller);
         }
         this.trigger = document.createElement("button");
         this.trigger.innerText = "Trigger";

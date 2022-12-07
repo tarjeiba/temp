@@ -83,28 +83,28 @@ class Volume {
 class ADSR {
   public node: GainNode;
 
-  private aController: HTMLInputElement;
-  private dController: HTMLInputElement;
-  private sController: HTMLInputElement;
-  private rController: HTMLInputElement;
+  private aController!: HTMLInputElement;
+  private dController!: HTMLInputElement;
+  private sController!: HTMLInputElement;
+  private rController!: HTMLInputElement;
   private trigger: HTMLButtonElement;
 
   constructor(private patch: Patch, private el: HTMLDivElement) {
     this.node = this.patch.ctx.createGain();
 
-    for (let name of [
-      "aController",
-      "dController",
-      "sController",
-      "rController",
+    for (let controller of [
+      this.aController,
+      this.dController,
+      this.sController,
+      this.rController,
     ]) {
-      this[name] = document.createElement("input");
-      this[name].type = "range";
-      this[name].min = "0";
-      this[name].max = "10";
-      this[name].value = "1";
-      this[name].step = "0.01";
-      this.el.appendChild(this[name]);
+      controller = document.createElement("input");
+      controller.type = "range";
+      controller.min = "0";
+      controller.max = "10";
+      controller.value = "1";
+      controller.step = "0.01";
+      this.el.appendChild(controller);
     }
 
     this.trigger = document.createElement("button");

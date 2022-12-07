@@ -1,3 +1,4 @@
+"use strict";
 const SVGNS = "http://www.w3.org/2000/svg";
 const waveforms = {
     sine: (f, x) => Math.sin(f * x),
@@ -63,8 +64,8 @@ class Graph {
     drawMarker(x, y, group) {
         const circle = document.createElementNS(SVGNS, "circle");
         circle.setAttribute("r", "1");
-        circle.setAttribute("cx", x);
-        circle.setAttribute("cy", y);
+        circle.setAttribute("cx", String(x));
+        circle.setAttribute("cy", String(y));
         circle.setAttribute("fill", "red");
         group.appendChild(circle);
         this.markers.push(circle);
