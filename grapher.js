@@ -1,16 +1,33 @@
 const SVGNS = "http://www.w3.org/2000/svg";
-export function createAnalyzerTimePlot(position) {
+export function createAnalyzerTimePlot(position, scale) {
     if (!position)
         return console.log;
     const svgns = "http://www.w3.org/2000/svg";
     const svg = document.createElementNS(svgns, "svg");
-    svg.setAttribute("viewBox", "0 -50 2048 100");
+    if (scale) {
+        svg.setAttribute("viewBox", "0 -500 2048 1000");
+    }
+    else {
+        svg.setAttribute("viewBox", "0 -50 2048 100");
+    }
     svg.setAttribute("preserveAspectRatio", "none");
     const line = document.createElementNS(svgns, "polyline");
     line.setAttribute("fill", "none");
     line.setAttribute("stroke", "black");
     function updateLine(data) {
-        const arr = new Array(...data);
+        let neg = false;
+        let breakpoint = 0;
+        for (let i = 0; i < data.length; i++) {
+            const pos = data[i] >= 0;
+            if (!neg && !pos) {
+                neg = true;
+            }
+            if (neg && pos) {
+                breakpoint = i;
+                break;
+            }
+        }
+        const arr = new Array(...data.slice(breakpoint));
         line.setAttribute("points", arr.map((num, idx) => `${idx}, ${num * 500}`).join(" "));
     }
     svg.appendChild(line);

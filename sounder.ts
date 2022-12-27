@@ -1,3 +1,5 @@
+import { createAnalyzerTimePlot } from "./grapher.js";
+
 class Patch {
   public ctx = new window.AudioContext();
 
@@ -11,7 +13,18 @@ class Patch {
       const moduleType = div.getAttribute("module");
       switch (moduleType) {
         case "oscillator":
-          return new Oscillator(this, div);
+          const osc = new Oscillator(this, div);
+          const analyzerDiv = document.createElement("div");
+          div.appendChild(analyzerDiv);
+          const analyzer = new AnalyserNode(this.ctx);
+          const updateLine = createAnalyzerTimePlot(analyzerDiv, true);
+          const analyzerBuffer = new Float32Array(analyzer.fftSize);
+          setInterval(() => {
+            analyzer.getFloatTimeDomainData(analyzerBuffer);
+            updateLine(analyzerBuffer);
+          }, 30);
+          osc.node.connect(analyzer);
+          return osc;
         case "adsr":
           return new ADSR(this, div);
         case "volume":
@@ -34,7 +47,7 @@ class Oscillator {
   public node: OscillatorNode;
 
   constructor(private patch: Patch, private el: HTMLFieldSetElement) {
-    this.node = this.patch.ctx.createOscillator();
+    this.node = new OscillatorNode(this.patch.ctx);
     this.node.start();
     this.node.frequency.value = 440;
     this.node.type = "sine";
