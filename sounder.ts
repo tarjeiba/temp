@@ -2,6 +2,8 @@ class Patch {
   public ctx = new window.AudioContext();
 
   constructor(id: string) {
+    this.ctx.suspend();
+
     const container = document.getElementById(id);
     if (!container) return;
     const divs = container.getElementsByTagName("div");
