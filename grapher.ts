@@ -1,5 +1,31 @@
 const SVGNS = "http://www.w3.org/2000/svg";
 
+export function createAnalyzerTimePlot(
+  position: HTMLElement
+): (data: Float32Array) => void {
+  const svgns = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(svgns, "svg");
+  svg.setAttribute("viewBox", "0 -50 2048 100");
+  svg.setAttribute("preserveAspectRatio", "none");
+
+  const line = document.createElementNS(svgns, "polyline");
+  line.setAttribute("fill", "none");
+  line.setAttribute("stroke", "black");
+
+  function updateLine(data: Float32Array): void {
+    const arr = new Array(...data);
+    line.setAttribute(
+      "points",
+      arr.map((num, idx) => `${idx}, ${num * 500}`).join(" ")
+    );
+  }
+
+  svg.appendChild(line);
+  position.after(svg);
+
+  return updateLine;
+}
+
 const waveforms = {
   sine: (f: number, x: number) => Math.sin(f * x),
   triangle: (f: number, x: number) => {
@@ -109,3 +135,8 @@ class Graph {
     this.svg.appendChild(g);
   }
 }
+
+(() => {
+  const ikkeinteraktiv = new Graph("ikkeinteraktivsinus");
+  const enkelsinus = new Graph("enkelsinus");
+})();

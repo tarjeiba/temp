@@ -1,28 +1,4 @@
-function createAnalyzerTimePlot(
-  position: HTMLElement
-): (data: Float32Array) => void {
-  const svgns = "http://www.w3.org/2000/svg";
-  const svg = document.createElementNS(svgns, "svg");
-  svg.setAttribute("viewBox", "0 -50 2048 100");
-  svg.setAttribute("preserveAspectRatio", "none");
-
-  const line = document.createElementNS(svgns, "polyline");
-  line.setAttribute("fill", "none");
-  line.setAttribute("stroke", "black");
-
-  function updateLine(data: Float32Array): void {
-    const arr = new Array(...data);
-    line.setAttribute(
-      "points",
-      arr.map((num, idx) => `${idx}, ${num * 500}`).join(" ")
-    );
-  }
-
-  svg.appendChild(line);
-  position.after(svg);
-
-  return updateLine;
-}
+import { createAnalyzerTimePlot } from "./grapher.js";
 
 async function noisePatch() {
   const ctx = new AudioContext();
@@ -31,6 +7,10 @@ async function noisePatch() {
   const whiteNoiseNode = new AudioWorkletNode(ctx, "white-noise-processor");
 
   const brownNoiseNode = new AudioWorkletNode(ctx, "brown-noise-processor");
+  const brownFilter = new BiquadFilterNode(ctx, {
+    type: "lowpass",
+    frequency: 400,
+  });
 
   const brownGainNode = new GainNode(ctx);
   const brownNoiseVolume = new GainNode(ctx);
@@ -46,7 +26,8 @@ async function noisePatch() {
   whiteGainNode.gain.setValueAtTime(0.00001, ctx.currentTime);
   whiteNoiseVolume.gain.setValueAtTime(0.3, ctx.currentTime);
 
-  brownNoiseNode
+  whiteNoiseNode
+    .connect(brownFilter)
     .connect(brownNoiseVolume)
     .connect(brownGainNode)
     .connect(brownAnalyzer)

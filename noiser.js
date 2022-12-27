@@ -1,8 +1,8 @@
 import { createAnalyzerTimePlot } from "./grapher.js";
 async function noisePatch() {
     const ctx = new AudioContext();
-    await ctx.audioWorklet.addModule("white-noise-processor.js");
-    await ctx.audioWorklet.addModule("brown-noise-processor.js");
+    await ctx.audioWorklet.addModule("./white-noise-processor.js");
+    await ctx.audioWorklet.addModule("./brown-noise-processor.js");
     const whiteNoiseNode = new AudioWorkletNode(ctx, "white-noise-processor");
     const brownNoiseNode = new AudioWorkletNode(ctx, "brown-noise-processor");
     const brownFilter = new BiquadFilterNode(ctx, {
