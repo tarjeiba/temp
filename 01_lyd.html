@@ -7,8 +7,8 @@
     <title>Lyd</title>
     <link rel="stylesheet" href="./styles.css" />
 
-    <script src="./grapher.js"></script>
-    <script src="./sounder.js"></script>
+    <script src="./grapher.js" type="module"></script>
+    <script src="./sounder.js" type="module"></script>
     <script src="./noiser.js" type="module"></script>
   </head>
   <body>
@@ -21,15 +21,16 @@
         du skriver ned.
       </p>
 
-      <button
-        onclick="(()=> {
+      <div id="randomness-clicks-random">
+        <button
+          onclick="(()=> {
             document.getElementById('throws-number').textContent += (Math.random() <
             0.5 ? '1 ' : '0 ')})()"
-      >
-        Knips!
-      </button>
-      <span id="throws-number"> </span>
-
+        >
+          Knips!
+        </button>
+        <span id="throws-number"> </span>
+      </div>
       <p>
         Vi samler sammen tallene i grupper à 32, og benytter litt matte for å
         omdanne hver 32-lange gruppe av 0-er og 1-ere til et desimaltall mellom
@@ -370,10 +371,4 @@
       </details>
     </section>
   </body>
-
-  <script async>
-    const ikkeinteraktiv = new Graph("ikkeinteraktivsinus");
-    const enkelsinus = new Graph("enkelsinus");
-    const patch = new Patch("adsr");
-  </script>
 </html>
