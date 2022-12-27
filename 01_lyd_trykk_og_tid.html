@@ -1,0 +1,125 @@
+<section>
+  <h1>Tilfeldighet</h1>
+  <p>
+    Du knipser en mynt. Om den lander på kron, skriver du ned en null, om den
+    lander på mynt, én. Det blir tilsynelatende ingen mønstre i tallene du
+    skriver ned.
+  </p>
+  <p>
+    <iframe
+      title="Trykk på knappen og få tilfeldige tall"
+      src="https://tarjeiba.github.io/temp/fysikk-tilfeldighet-knips-tilfeldig.html"
+      width="100%"
+      height="100px"
+    ></iframe>
+  </p>
+  <p>
+    Vi samler sammen tallene i grupper à 32, og benytter litt matte for å<br />omdanne
+    hver 32-lange gruppe av 0-er og 1-ere til et desimaltall mellom<br />-1 og
+    1.
+  </p>
+  <p>
+    Vi samler sammen tallene i grupper à 32, og benytter litt matte for å
+    omdanne hver 32-lange gruppe av 0-er og 1-ere til et desimaltall mellom -1
+    og 1.
+  </p>
+  <p>
+    Vi knipser raskt. Veldig raskt. Vi knipser så vi hvert sekund rekker å få
+    44100 slike desimaltall, som hver består av 32 0-er og 1-ere.
+  </p>
+  <p>
+    Vi sender så alle disse desimaltallene til et lydkort, som lager en
+    elektrisk spenning, tilsvarende verdien til desimaltallet. Denne spenningen
+    gjør så at en liten magnet flytter litt på seg, som flytter på en liten
+    membran, og ut fra en høyttaler kommer følgende.
+  </p>
+  <p>
+    <iframe
+      title="Trykk på knappen og dra i bryteren og få støy"
+      src="https://tarjeiba.github.io/temp/fysikk-patch-hvit-stoy.html"
+      width="100%"
+      height="100px"
+    ></iframe>
+  </p>
+
+  <p>
+    Denne støyen, hvor alle verdier er helt uavhengige av hverandre. Et
+    lydmessig anarki. Denne støyen kalles <em>hvit støy</em>. I naturfag lærte
+    du at <em>hvitt lys</em> inneholder alle regnbuens farger. Nå skal du lære
+    at <em>hvit støy</em> inneholder alle, hva skal vi si, skalaens toner?
+  </p>
+
+  <p>
+    For nå, la oss ta med oss følgende. Siffer (engelsk «digits», vi er nå
+    innenfor det <em>digitale</em>) brukes til å representere verdier. Dersom
+    disse verdiene endrer seg i forhold til hverande, kan vi
+    <em>høre</em> endringen i form av lyd. Dersom det ikke er noen struktur
+    mellom tallene, vil lyden vi høre være støy.
+  </p>
+</section>
+
+<section>
+  <h1>Rydde opp i rotet</h1>
+  <p>
+    Støyen vi hørte over, var ikke fra en lydfil. Den blei generert av det du nå
+    bruker til å lese denne nettsida. Om du bruker en mobiltelefon, var det
+    denne som lagde lyden, om du bruker en PC, var det denne. Den lagde lyden
+    ved å kjøre en liten kodesnutt.
+  </p>
+
+  <p>Denne koden ser omtrent ut som følger:</p>
+  <pre>
+                Fortsett med følgende så lenge jeg ber om verdier:
+                1. Gi meg et tilfeldig tall mellom 0 og 1 (Math.random())
+                2. Gang tallet med to
+                3. Trekk fra 1
+                4. Gå til steg 1
+  </pre>
+  <p>
+    Maskinen knipser altså ikke mynt, men den gir oss et ferdig tall mellom 0 og
+    1. For å lage lyd av det, ønsket vi et tall mellom -1 og 1, så da ganger vi
+    først tallet med 2. Dette gir oss et tilfeldig tall mellom 0 og 2. For å få
+    tallet til å være mellom -1 og 1, kan vi da bare trekke fra 1.
+  </p>
+
+  <p>
+    Så tilfeldig, kaotisk endring er som oftest ikke det vi ønsker, vi kan dog
+    ikke gå for <em>ingen</em> endring. En mynt med kron på begge sider.
+  </p>
+  <p>
+    <iframe
+      title="Trykk på knappen og få tilfeldige tall"
+      src="https://tarjeiba.github.io/temp/fysikk-tilfeldighet-knips-null.html"
+      width="100%"
+      height="100px"
+    ></iframe>
+  </p>
+
+  <p>Ei heller kan vi gå for en mynt med mynt på begge sider</p>
+
+  <p>
+    <iframe
+      title="Trykk på knappen og få tilfeldige tall"
+      src="https://tarjeiba.github.io/temp/fysikk-tilfeldighet-knips-en.html"
+      width="100%"
+      height="100px"
+    ></iframe>
+  </p>
+
+  <p>
+    Her er det ikke mye å høre. For å få lyd, må noe være i
+    <em>endring</em>. Med støy, er den endringen ustruktert. Hva skjer om vi
+    strukturerer endringen? Hva om vi gjør endringen mer systematisk? Hva om vi
+    heller enn å velge en fullstendig tilfeldig fullstendig ny verdi, fortsatt
+    lar noe være tilfeldig, men at det tilfeldige bidraget er mindre, tregere.
+  </p>
+
+  <input
+    id="brown-noise-volume"
+    type="range"
+    min="0.001"
+    max="0.3"
+    step="0.01"
+  />
+  <button id="brown-noise">Start</button>
+</section>
