@@ -45,12 +45,12 @@ async function noisePatch() {
   const whiteButton = document.getElementById("white-noise");
   const whiteVolume = document.getElementById("white-noise-volume");
 
-  whiteVolume!.addEventListener("input", (ev) => {
+  whiteVolume?.addEventListener("input", (ev) => {
     const val = (ev.target as HTMLInputElement).value;
     whiteGainNode.gain.setValueAtTime(Number(val), ctx.currentTime);
   });
 
-  brownVolume!.addEventListener("input", (ev) => {
+  brownVolume?.addEventListener("input", (ev) => {
     const val = (ev.target as HTMLInputElement).value;
     brownGainNode.gain.setValueAtTime(Number(val), ctx.currentTime);
   });
@@ -66,7 +66,7 @@ async function noisePatch() {
       whiteNoiseVolume.gain.setTargetAtTime(0.0001, ctx.currentTime, 0.1);
       setTimeout(() => {
         ctx.suspend().then(() => {
-          whiteButton!.textContent = "Start";
+          if (whiteButton) whiteButton.textContent = "Start";
         });
       }, 500);
     } else if (ctx.state === "suspended") {
@@ -76,16 +76,16 @@ async function noisePatch() {
       }, 30);
       ctx.resume().then(() => {
         whiteNoiseVolume.gain.setTargetAtTime(0.9, ctx.currentTime, 0.1);
-        whiteButton!.textContent = "Stopp";
+        if (whiteButton) whiteButton.textContent = "Stopp";
       });
     }
   }
 
-  whiteButton!.onclick = toggleWhite;
+  if (whiteButton) whiteButton.onclick = toggleWhite;
 
   let brownAnalyzerTimer: number;
   let brownAnalyzerData = new Float32Array(brownAnalyzer.fftSize);
-  const updateBrownLine = createAnalyzerTimePlot(brownButton!);
+  const updateBrownLine = createAnalyzerTimePlot(brownButton);
 
   function toggleBrown() {
     if (ctx.state === "running") {
@@ -93,7 +93,7 @@ async function noisePatch() {
       brownNoiseVolume.gain.setTargetAtTime(0.0001, ctx.currentTime, 0.1);
       setTimeout(() => {
         ctx.suspend().then(() => {
-          brownButton!.textContent = "Start";
+          if (brownButton) brownButton.textContent = "Start";
         });
       }, 500);
     } else if (ctx.state === "suspended") {
@@ -103,12 +103,12 @@ async function noisePatch() {
       }, 30);
       ctx.resume().then(() => {
         brownNoiseVolume.gain.setTargetAtTime(0.9, ctx.currentTime, 0.1);
-        brownButton!.textContent = "Stopp";
+        if (brownButton) brownButton.textContent = "Stopp";
       });
     }
   }
 
-  brownButton!.onclick = toggleBrown;
+  if (brownButton) brownButton.onclick = toggleBrown;
 }
 
 noisePatch().then(() => {

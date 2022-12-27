@@ -1,8 +1,9 @@
 const SVGNS = "http://www.w3.org/2000/svg";
 
 export function createAnalyzerTimePlot(
-  position: HTMLElement
+  position: HTMLElement | null
 ): (data: Float32Array) => void {
+  if (!position) return console.log;
   const svgns = "http://www.w3.org/2000/svg";
   const svg = document.createElementNS(svgns, "svg");
   svg.setAttribute("viewBox", "0 -50 2048 100");
