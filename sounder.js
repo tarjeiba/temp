@@ -6,7 +6,7 @@ class Patch {
         const container = document.getElementById(id);
         if (!container)
             return;
-        const divs = container.getElementsByTagName("div");
+        const divs = container.getElementsByTagName("fieldset");
         const modules = Array.from(divs).map((div) => {
             const moduleType = div.getAttribute("module");
             switch (moduleType) {

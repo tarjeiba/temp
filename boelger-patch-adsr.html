@@ -11,22 +11,15 @@
   </head>
   <body>
     <div id="adsr">
-      <p>
-        Først setter vi opp en<em>oscillator</em>, noe som kan generere bølgen
-        vi skal høre. Velg hva slags bølgeform du vil ha, og hvilken frekvens du
-        ønsker.
-      </p>
-      <div module="oscillator"></div>
-      <p>
-        Vi setter deretter opp en konturgenerator. Prøv deg fram med denne. Det
-        er fire verdier å stille på, A, D, S, R.
-      </p>
-      <div module="adsr"></div>
-      <p>
-        Til slutt kobler vi på et vanlig volumtrinn så vi kan justere volumet på
-        lyden.
-      </p>
-      <div module="volume"></div>
+      <fieldset module="oscillator">
+        <legend>Oscillator</legend>
+      </fieldset>
+      <fieldset module="adsr">
+        <legend>Konturgenerator</legend>
+      </fieldset>
+      <fieldset module="volume">
+        <legend>Volum</legend>
+      </fieldset>
     </div>
   </body>
 </html>

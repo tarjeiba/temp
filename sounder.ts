@@ -6,7 +6,7 @@ class Patch {
 
     const container = document.getElementById(id);
     if (!container) return;
-    const divs = container.getElementsByTagName("div");
+    const divs = container.getElementsByTagName("fieldset");
     const modules = Array.from(divs).map((div) => {
       const moduleType = div.getAttribute("module");
       switch (moduleType) {
@@ -33,7 +33,7 @@ class Patch {
 class Oscillator {
   public node: OscillatorNode;
 
-  constructor(private patch: Patch, private el: HTMLDivElement) {
+  constructor(private patch: Patch, private el: HTMLFieldSetElement) {
     this.node = this.patch.ctx.createOscillator();
     this.node.start();
     this.node.frequency.value = 440;
@@ -72,7 +72,7 @@ class Volume {
   public node = this.patch.ctx.createGain();
   private volController: HTMLInputElement;
 
-  constructor(private patch: Patch, private el: HTMLDivElement) {
+  constructor(private patch: Patch, private el: HTMLFieldSetElement) {
     this.volController = document.createElement("input");
     this.volController.type = "range";
     this.volController.min = "1";
@@ -102,7 +102,7 @@ class ADSR {
 
   private interval?: number;
 
-  constructor(private patch: Patch, private el: HTMLDivElement) {
+  constructor(private patch: Patch, private el: HTMLFieldSetElement) {
     this.node = new GainNode(this.patch.ctx);
 
     for (let controller of [
