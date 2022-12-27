@@ -51,9 +51,10 @@ class Oscillator {
         freq.min = "20";
         freq.max = "2000";
         freq.step = "1";
-        freq.onchange = () => {
-            this.node.frequency.setValueAtTime(Number(freq.value), this.patch.ctx.currentTime);
-        };
+        freq.value = "660";
+        freq.addEventListener("input", () => {
+            this.node.frequency.setValueAtTime(freq.valueAsNumber, this.patch.ctx.currentTime);
+        });
         this.el.appendChild(freq);
     }
 }
@@ -64,51 +65,71 @@ class Volume {
         this.node = this.patch.ctx.createGain();
         this.volController = document.createElement("input");
         this.volController.type = "range";
-        this.volController.min = "0";
-        this.volController.max = "2";
-        this.volController.value = "1";
-        this.volController.step = "0.01";
+        this.volController.min = "1";
+        this.volController.max = "10";
+        this.volController.value = "5";
+        this.volController.step = "0.001";
         this.el.appendChild(this.volController);
+        this.volController.addEventListener("input", (ev) => {
+            const val = ev.target.value;
+            this.node.gain.setValueAtTime(Number(val) / 10, this.patch.ctx.currentTime);
+        });
     }
 }
 class ADSR {
     constructor(patch, el) {
         this.patch = patch;
         this.el = el;
+        this.aController = document.createElement("input");
+        this.dController = document.createElement("input");
+        this.sController = document.createElement("input");
+        this.rController = document.createElement("input");
+        this.trigger = document.createElement("button");
         this.press = () => {
-            this.patch.ctx.resume();
-            this.node.gain.exponentialRampToValueAtTime(1.0, this.patch.ctx.currentTime + Number(this.aController.value));
-            this.node.gain.exponentialRampToValueAtTime(1.0 * Number(this.sController.value), this.patch.ctx.currentTime +
-                Number(this.aController.value) +
-                Number(this.dController.value));
+            var _a, _b;
+            if (this.patch.ctx.state === "suspended") {
+                this.patch.ctx.resume();
+            }
+            const now = this.patch.ctx.currentTime;
+            const a = this.aController.valueAsNumber / 10;
+            const d = this.dController.valueAsNumber / 10;
+            const s = this.sController.valueAsNumber / 10;
+            (_b = (_a = this.node.gain).cancelAndHoldAtTime) === null || _b === void 0 ? void 0 : _b.call(_a, now);
+            this.node.gain.exponentialRampToValueAtTime(1.0, now + a);
+            this.node.gain.exponentialRampToValueAtTime(s, now + a + d);
             document.addEventListener("touchend", this.release);
             document.addEventListener("mouseup", this.release);
         };
         this.release = () => {
-            this.node.gain.cancelScheduledValues(this.patch.ctx.currentTime);
-            this.node.gain.exponentialRampToValueAtTime(0.0000001, this.patch.ctx.currentTime + Number(this.rController.value));
+            var _a, _b;
+            const now = this.patch.ctx.currentTime;
+            const then = now + this.rController.valueAsNumber / 10;
+            (_b = (_a = this.node.gain).cancelAndHoldAtTime) === null || _b === void 0 ? void 0 : _b.call(_a, now);
+            this.node.gain.linearRampToValueAtTime(this.node.gain.value, now);
+            this.node.gain.linearRampToValueAtTime(0.001, then);
             document.removeEventListener("touchend", this.release);
             document.removeEventListener("mouseup", this.release);
         };
-        this.node = this.patch.ctx.createGain();
+        this.node = new GainNode(this.patch.ctx);
         for (let controller of [
             this.aController,
             this.dController,
             this.sController,
             this.rController,
         ]) {
-            controller = document.createElement("input");
             controller.type = "range";
-            controller.min = "0";
+            controller.min = "1";
             controller.max = "10";
-            controller.value = "1";
-            controller.step = "0.01";
+            controller.value = "5";
+            controller.step = "0.001";
             this.el.appendChild(controller);
         }
-        this.trigger = document.createElement("button");
-        this.trigger.innerText = "Trigger";
+        this.trigger.innerText = "Trigger!";
         this.trigger.addEventListener("touchstart", this.press);
         this.trigger.addEventListener("mousedown", this.press);
         this.el.appendChild(this.trigger);
     }
 }
+(() => {
+    const patch = new Patch("adsr");
+})();
