@@ -88,7 +88,7 @@ class Volume {
   constructor(private patch: Patch, private el: HTMLFieldSetElement) {
     this.volController = document.createElement("input");
     this.volController.type = "range";
-    this.volController.min = "1";
+    this.volController.min = "0";
     this.volController.max = "10";
     this.volController.value = "5";
     this.volController.step = "0.001";
@@ -159,9 +159,10 @@ class ADSR {
     const now = this.patch.ctx.currentTime;
     const then = now + this.rController.valueAsNumber / 10;
 
-    this.node.gain.cancelAndHoldAtTime?.(now);
+    this.node.gain.cancelAndHoldAtTime(now) ??
+      this.node.gain.cancelScheduledValues(now);
     this.node.gain.linearRampToValueAtTime(this.node.gain.value, now);
-    this.node.gain.linearRampToValueAtTime(0.001, then);
+    this.node.gain.linearRampToValueAtTime(0.0001, then);
 
     document.removeEventListener("touchend", this.release);
     document.removeEventListener("mouseup", this.release);
