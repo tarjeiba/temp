@@ -14,19 +14,21 @@
     ></iframe>
   </p>
   <p>
-    Vi samler sammen tallene i grupper à 32, og benytter litt matte for å<br />omdanne
-    hver 32-lange gruppe av 0-er og 1-ere til et desimaltall mellom<br />-1 og
-    1.
+    Vi samler sammen tallene i grupper à 32, og benytter litt matte for åomdanne
+    hver 32-lange gruppe av 0-er og 1-ere til et desimaltall mellom-1 og 1.
   </p>
   <p>
-    Vi samler sammen tallene i grupper à 32, og benytter litt matte for å
-    omdanne hver 32-lange gruppe av 0-er og 1-ere til et desimaltall mellom -1
-    og 1.
+    Vi knipser mynten raskt. Veldig raskt. Vi knipser så vi hvert sekund rekker
+    å få 44100 slike desimaltall, som hver består av 32 0-er og 1-ere.
   </p>
-  <p>
-    Vi knipser raskt. Veldig raskt. Vi knipser så vi hvert sekund rekker å få
-    44100 slike desimaltall, som hver består av 32 0-er og 1-ere.
-  </p>
+  <div class="ek-tiny-collapse">
+    <p>Antall knips i sekundet</p>
+    <p>
+      Dersom vi får 44100 desimaltall i sekundet, hver av 32 0-er eller 1-ere.
+      Hvor mange myntkast skal vi gjøre i sekundet?
+    </p>
+  </div>
+
   <p>
     Vi sender så alle disse desimaltallene til et lydkort, som lager en
     elektrisk spenning, tilsvarende verdien til desimaltallet. Denne spenningen
@@ -46,16 +48,32 @@
     Denne støyen, hvor alle verdier er helt uavhengige av hverandre. Et
     lydmessig anarki. Denne støyen kalles <em>hvit støy</em>. I naturfag lærte
     du at <em>hvitt lys</em> inneholder alle regnbuens farger. Nå skal du lære
-    at <em>hvit støy</em> inneholder alle, hva skal vi si, skalaens toner?
+    at <em>hvit støy</em> inneholder alle, hva skal vi si, skalaens toner? Alle
+    bølgers frekvenser?
   </p>
 
   <p>
     For nå, la oss ta med oss følgende. Siffer (engelsk «digits», vi er nå
-    innenfor det <em>digitale</em>) brukes til å representere verdier. Dersom
-    disse verdiene endrer seg i forhold til hverande, kan vi
-    <em>høre</em> endringen i form av lyd. Dersom det ikke er noen struktur
-    mellom tallene, vil lyden vi høre være støy.
+    innenfor det <em>digitale</em>, i kontrast til det <em>analoge</em>) brukes
+    til å representere verdier. Dersom disse verdiene endrer seg i forhold til
+    hverande, kan vi <em>høre</em> endringen i form av lyd. Dersom det ikke er
+    noen struktur mellom tallene, vil lyden vi høre være støy.
   </p>
+
+  <div class="ek-tiny-collapse">
+    <p>Analogt og digitalt</p>
+    <p>
+      Når vi snakker om lyd og musikk, hva legger du vanligvis i begrepene
+      «analogt» og «digitalt»?
+    </p>
+  </div>
+  <div class="ek-tiny-collapse">
+    <p>Akustisk og elektrisk</p>
+    <p>
+      Hva så med begrepene «akustisk» og «elektrisk»? Skiller de seg fra
+      dikotomien analogt og digitalt?
+    </p>
+  </div>
 </section>
 
 <section>
@@ -66,7 +84,14 @@
     denne som lagde lyden, om du bruker en PC, var det denne. Den lagde lyden
     ved å kjøre en liten kodesnutt.
   </p>
-  <p>Denne koden ser omtrent ut som følger:</p>
+  <p>
+    Merk, siden det var din spesifikke mobil eller datamaskin som trakk de
+    tilfeldige tallene, vil lyden du fikk være ulik alle andres lyder.
+    Spørsmålet er kanskje om det vil være en hørbar forskjell mellom din og
+    andres maskingenererte støy? Min klare antagelse er «nei».
+  </p>
+
+  <p>Den nevnte koden ser omtrent ut som følger:</p>
   <pre>
                 Fortsett med følgende så lenge jeg ber om verdier:
                 1. Gi meg et tilfeldig tall mellom 0 og 1 (Math.random())
@@ -120,9 +145,9 @@
     I eksempelet over har jeg fjernet de raskeste endringene. Det er kun de
     tregere, mer langsomme endringene som er igjen. Jeg har benyttet det vi
     kaller et lavpass-filter. Vi skal i neste avsnitt se på begrepet «frekvens»,
-    for nå er&nbsp; det tilstrekkelig å vite at frekvens er ett av målene vi kan
-    bruke for hvor rask en endring er, og her har vi kun beholdt de lave
-    frekvensene i lyden, de litt tregere endringene.
+    for nå er det tilstrekkelig å vite at frekvens er ett av målene vi kan bruke
+    for hvor rask en endring er, og her har vi kun beholdt de lave frekvensene i
+    lyden, de litt tregere endringene.
   </p>
   <div class="ek-tiny-collapse">
     <p>Beskrivelse</p>
