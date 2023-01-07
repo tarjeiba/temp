@@ -3,11 +3,9 @@ import { createAnalyzerTimePlot } from "./grapher.js";
 class Patch {
   public ctx = new window.AudioContext();
 
-  constructor(id: string) {
+  constructor(container: HTMLDivElement) {
     this.ctx.suspend();
 
-    const container = document.getElementById(id);
-    if (!container) return;
     const divs = container.getElementsByTagName("fieldset");
     const modules = Array.from(divs).map((div) => {
       const moduleType = div.getAttribute("module");
@@ -169,6 +167,8 @@ class ADSR {
   };
 }
 
-(() => {
-  const patch = new Patch("adsr");
-})();
+(
+  Array.from(document.getElementsByClassName("patch")) as HTMLDivElement[]
+).forEach((div) => {
+  new Patch(div);
+});
