@@ -35,30 +35,53 @@ export function createAnalyzerTimePlot(position, scale) {
     return updateLine;
 }
 const waveforms = {
-    sine: (f, x) => Math.sin(f * x),
+    sine: (A, f, x) => A * Math.sin(f * x),
     triangle: (f, x) => {
         const T = 1 / f;
         const t = 123 % 2;
     },
 };
-class Controller {
-    constructor(graph, el) {
-        this.graph = graph;
-        this.el = el;
-        this.el.oninput = () => this.graph.updateFrequency(Number(this.el.value));
-    }
-}
 class Graph {
     constructor(el, caption) {
-        var _a;
         this.markers = [];
-        this.createControllers = (el) => {
-            const inputs = Array.from(el.getElementsByTagName("input"));
-            inputs.forEach((input) => new Controller(this, input));
-        };
+        this.amplitude = 1;
+        this.frequency = 2;
         const figure = document.createElement("figure");
-        const controlPanels = Array.from((_a = el === null || el === void 0 ? void 0 : el.getElementsByClassName("controlpanel")) !== null && _a !== void 0 ? _a : []);
-        controlPanels.forEach(this.createControllers);
+        Array.from(el.getElementsByClassName("controlpanel")).forEach((div) => {
+            const values = div.getAttribute("values");
+            if (!values) {
+                console.warn("Trying to create controller with unspecified value.");
+                return;
+            }
+            values
+                .split(" ")
+                .filter((val) => !!val)
+                .forEach((value) => {
+                const label = document.createElement("label");
+                const controller = document.createElement("input");
+                controller.type = "range";
+                controller.min = "0";
+                controller.max = "100";
+                controller.step = "0.01";
+                switch (value) {
+                    case "amplitude":
+                        label.textContent = "Amplitude";
+                        controller.oninput = () => {
+                            this.updateAmplitude(Number(controller.value));
+                        };
+                        break;
+                    case "frequency":
+                        label.textContent = "Frekvens";
+                        controller.oninput = () => {
+                            console.log(controller.value);
+                            this.updateFrequency(Number(controller.value) / 100);
+                        };
+                        break;
+                }
+                label.appendChild(controller);
+                el.appendChild(label);
+            });
+        });
         this.svg = document.createElementNS(SVGNS, "svg");
         this.svg.setAttribute("width", "80%");
         this.svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
@@ -88,10 +111,18 @@ class Graph {
         g.appendChild(yaxis);
         this.svg.appendChild(g);
     }
+    updateAmplitude(value) {
+        this.amplitude = value;
+        this.update();
+    }
     updateFrequency(value) {
+        this.frequency = value;
+        this.update();
+    }
+    update() {
         this.markers.forEach((marker) => {
             var _a;
-            marker.setAttribute("cy", String((_a = waveforms["sine"](value, Number(marker.getAttribute("cx")))) !== null && _a !== void 0 ? _a : 0 * 50));
+            marker.setAttribute("cy", String((_a = waveforms["sine"](this.amplitude, this.frequency, Number(marker.getAttribute("cx")))) !== null && _a !== void 0 ? _a : 0 * 50));
         });
     }
     drawMarker(x, y, group) {
