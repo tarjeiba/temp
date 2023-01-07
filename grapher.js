@@ -49,14 +49,13 @@ class Controller {
     }
 }
 class Graph {
-    constructor(id, caption) {
+    constructor(el, caption) {
         var _a;
         this.markers = [];
         this.createControllers = (el) => {
             const inputs = Array.from(el.getElementsByTagName("input"));
             inputs.forEach((input) => new Controller(this, input));
         };
-        const el = document.getElementById(id);
         const figure = document.createElement("figure");
         const controlPanels = Array.from((_a = el === null || el === void 0 ? void 0 : el.getElementsByClassName("controlpanel")) !== null && _a !== void 0 ? _a : []);
         controlPanels.forEach(this.createControllers);
@@ -114,7 +113,6 @@ class Graph {
         this.svg.appendChild(g);
     }
 }
-(() => {
-    const ikkeinteraktiv = new Graph("ikkeinteraktivsinus");
-    const enkelsinus = new Graph("enkelsinus");
-})();
+Array.from(document.getElementsByClassName("graph")).forEach((div) => {
+    new Graph(div);
+});

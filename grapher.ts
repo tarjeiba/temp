@@ -64,8 +64,7 @@ class Graph {
   private svg: SVGElement;
   private markers: SVGCircleElement[] = [];
 
-  constructor(id: string, caption?: string) {
-    const el = document.getElementById(id) as HTMLDivElement;
+  constructor(el: HTMLDivElement, caption?: string) {
     const figure = document.createElement("figure");
 
     const controlPanels = Array.from(
@@ -156,7 +155,6 @@ class Graph {
   }
 }
 
-(() => {
-  const ikkeinteraktiv = new Graph("ikkeinteraktivsinus");
-  const enkelsinus = new Graph("enkelsinus");
-})();
+Array.from(document.getElementsByClassName("graph")).forEach((div) => {
+  new Graph(div as HTMLDivElement);
+});
