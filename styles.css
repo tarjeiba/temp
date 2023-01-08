@@ -53,3 +53,7 @@ figcaption::before {
   font-family: monospace;
   max-width: 50%;
 }
+
+input[type="range"][orient="vertical"] {
+  appearance: slider-vertical;
+}

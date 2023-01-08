@@ -23,6 +23,8 @@ class Patch {
           }, 30);
           osc.node.connect(analyzer);
           return osc;
+        case "periodicoscillator":
+          return new PeriodicOscillator(this, div);
         case "adsr":
           return new ADSR(this, div);
         case "volume":
@@ -39,6 +41,100 @@ class Patch {
     filter.connect(this.ctx.destination);
     modules[modules.length - 1]!.node.connect(filter);
   }
+}
+
+class PeriodicOscillator {
+  public node: OscillatorNode;
+  public depth = 10;
+  private controllers: HTMLInputElement[];
+
+  constructor(private patch: Patch, private el: HTMLFieldSetElement) {
+    this.controllers = Array(this.depth)
+      .fill(undefined)
+      .map((controller, idx) => {
+        const input = document.createElement("input");
+        const label = document.createElement("label");
+        label.innerText = String(idx);
+        label.appendChild(input);
+        input.type = "range";
+        input.min = "0";
+        input.max = "0.5";
+        input.value = "0";
+        input.step = "0.001";
+        input.setAttribute("orient", "vertical");
+        input.addEventListener("input", this.updateWave);
+        this.el.appendChild(label);
+        return input;
+      });
+    this.node = new OscillatorNode(this.patch.ctx);
+    const analyzer = new AnalyserNode(this.patch.ctx);
+
+    const select = document.createElement("select");
+    [['Tidsdomene', 'time'], ['Frekvensdomene', 'freq']].forEach(([inner, value]) => {
+      const option = document.createElement("option");
+      option.innerHTML = inner;
+      option.value = value;
+      select.appendChild(option);
+    });
+    this.el.appendChild(select);
+
+    const analyzerFreqContainer = document.createElement('div');
+    const analyzerFreqDiv = document.createElement("div");
+    analyzerFreqContainer.appendChild(analyzerFreqDiv);
+    this.el.appendChild(analyzerFreqContainer);
+    const updateLine = createAnalyzerTimePlot(analyzerFreqDiv, true);
+    const analyzerBuffer = new Float32Array(analyzer.frequencyBinCount);
+    setInterval(() => {
+      analyzer.getFloatFrequencyData(analyzerBuffer);
+      updateLine(analyzerBuffer.map((num) => num / -100));
+    }, 30);
+
+    const analyzerTimeContainer = document.createElement('div');
+    analyzerTimeContainer.style.display = 'none';
+    const analyzerTimeDiv = document.createElement("div");
+    analyzerTimeContainer.appendChild(analyzerTimeDiv);
+    this.el.appendChild(analyzerTimeContainer);
+    const updateTimeLine = createAnalyzerTimePlot(analyzerTimeDiv, true);
+    const analyzerTime = new Float32Array(
+      analyzer.fftSize)
+    );
+    setInterval(() => {
+      analyzer.getFloatTimeDomainData(analyzerTime);
+      updateTimeLine(analyzerTime);
+    }, 30);
+
+    select.addEventListener("change", () => {
+      switch (select.value) {
+        case "time":
+          analyzerTimeContainer.style.display = 'block';
+          analyzerFreqContainer.style.display = 'none';
+          break;
+        case "freq":
+          analyzerTimeContainer.style.display = 'none';
+          analyzerFreqContainer.style.display = 'block';
+      }
+    });
+
+    this.node.connect(analyzer);
+    this.node.start();
+    this.updateWave();
+  }
+
+  updateWave = () => {
+    if (this.patch.ctx.state === "suspended") {
+      this.patch.ctx.resume();
+    }
+    const values = this.controllers.map((input) => Number(input.value));
+    console.log(values);
+    const imag = new Float32Array(values);
+    const real = new Float32Array(Array(this.depth).fill(0));
+    const periodicWave = new PeriodicWave(this.patch.ctx, {
+      imag,
+      real,
+      disableNormalization: true,
+    });
+    this.node.setPeriodicWave(periodicWave);
+  };
 }
 
 class Oscillator {
@@ -157,7 +253,7 @@ class ADSR {
     const now = this.patch.ctx.currentTime;
     const then = now + this.rController.valueAsNumber / 10;
 
-    this.node.gain.cancelAndHoldAtTime(now) ??
+    this.node.gain.cancelAndHoldAtTime?.(now) ??
       this.node.gain.cancelScheduledValues(now);
     this.node.gain.linearRampToValueAtTime(this.node.gain.value, now);
     this.node.gain.linearRampToValueAtTime(0.0001, then);
